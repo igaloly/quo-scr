@@ -1,0 +1,44 @@
+{
+    "title": "Quora Scraper input schema",
+    "description": "This is actor input schema for Quora Scraper, it lets you provide search term for your run.",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "query": {
+            "title": "Search term",
+            "type": "string",
+            "description": "Quora will search for questions using this string.",
+            "editor": "textfield",
+            "prefill": "What is the best way to learn to code?"
+        },
+        "proxy": {
+            "title": "Proxy configuration",
+            "type": "object",
+            "description": "Select proxies to be used by your crawler. NOTE: residential proxies may not work with this scraper",
+            "prefill": { "useApifyProxy": true },
+            "editor": "proxy"
+        },
+        "maxPoolSize": {
+            "title": "Max pool size",
+            "type": "integer",
+            "description": "Maximum number of sessions in the pool",
+            "editor": "number",
+            "default": 10
+        },
+        "maxAgeSecs": {
+            "title": "Max age of each session",
+            "type": "integer",
+            "description": "Maximum age of sessions in the pool",
+            "editor": "number",
+            "default": 999999999
+        },
+        "maxUsageCount": {
+            "title": "Max usage count of each session",
+            "type": "integer",
+            "description": "Maximum number of times a session can be used",
+            "editor": "number",
+            "default": 200
+        }
+    },
+    "required": ["query"]
+}
