@@ -18,8 +18,8 @@ await Actor.init();
 // }
 
 // const { query, proxy, maxAgeSecs, maxPoolSize, maxUsageCount } = input;
-const queries = ['why', 'what', 'how', 'should', 'have', 'I', 'he', 'you', 'do', 'his', 'we', 'say', 'her', 'she', 'my', 'one', 'all', 'would', 'what', 'so', 'up', 'out', 'who', 'get', 'which', 'go', 'me', 'when', 'make', 'can', 'like', 'time', 'just', 'him', 'know', 'take', 'people', 'year', 'your', 'good', 'some', 'could', 'see', 'other', 'now', 'look', 'only', 'come', 'over']
-const query = queries[6]
+const queries = ['why', 'what', 'how', 'should', 'have', 'I', 'he', 'you', 'do', 'his', 'we', 'say', 'her', 'she', 'my', 'one', 'all', 'would', 'what', 'so', 'up', 'out', 'who', 'get', 'which', 'go', 'me', 'when', 'make', 'can', 'like', 'time', 'just', 'him', 'know', 'take', 'people', 'year', 'your', 'good', 'some', 'could', 'see', 'other', 'now', 'look', 'only', 'come', 'over', 'think', 'back', 'after', 'use', 'two', 'how', 'our', 'work', 'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'give', 'day', 'most', 'us']
+const query = queries[7]
 const proxy = null
 const maxAgeSecs = 999999999
 const maxPoolSize = 10
