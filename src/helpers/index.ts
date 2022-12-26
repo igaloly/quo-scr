@@ -83,10 +83,12 @@ export const isAnswersKVKey = (
 };
 
 export const getAllExistingQuestions = () => {
-    return JSON.parse(
-        fs.readFileSync(
-            path.join('./existing_qids.json'),
-            'utf8'
+    return new Set(
+        JSON.parse(
+            fs.readFileSync(
+                path.join('./existing_qids.json'),
+                'utf8'
+            )
         )
     )
 }

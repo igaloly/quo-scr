@@ -11,6 +11,7 @@ let allQuestionFileNames = new Set(
         )
     )
 )
+console.log(allQuestionFileNames.size)
 const questionsPath = `./storage/datasets/default`
 const questionFileNames = new Set(fs.readdirSync(path.join(questionsPath)))
 allQuestionFileNames = new Set([...allQuestionFileNames, ...questionFileNames])
@@ -18,3 +19,4 @@ fs.writeFileSync(
     path.join(PATH),
     JSON.stringify([...allQuestionFileNames]),
 )
+console.log(allQuestionFileNames.size)

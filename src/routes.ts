@@ -19,7 +19,6 @@ import { QueryType } from "./types/query_types.js";
 export const router = createBasicRouter();
 
 const questionFileNames = getAllExistingQuestions()
-console.log(questionFileNames)
 
 const defaultCrawlerState: CrawlerState = {
     extensionCodes: DEFAULT_QUERY_EXTENSIONS,
