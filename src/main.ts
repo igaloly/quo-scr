@@ -13,61 +13,60 @@ import { QueryType } from "./types/query_types.js";
 const queries = ['she', 'my', 'one', 'all', 'would', 'what', 'so', 'up', 'out', 'who', 'get', 'which', 'go', 'me', 'when', 'make', 'can', 'like', 'time', 'just', 'him', 'know', 'take', 'people', 'year', 'your', 'good', 'some', 'could', 'see', 'other', 'now', 'look', 'only', 'come', 'over', 'think', 'back', 'after', 'use', 'two', 'how', 'our', 'work', 'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'give', 'day', 'most', 'us']
 
 for(const query of queries) {
-    console.log(query)
-    // // Initialize the Apify SDK
-    // await Actor.init();
+    // Initialize the Apify SDK
+    await Actor.init();
 
-    // // const input = await Actor.getInput<Input>();
-    // // if (!input) {
-    // //     throw new Error(ERROR_MESSAGES.INPUT_EMPTY);
-    // // }
+    // const input = await Actor.getInput<Input>();
+    // if (!input) {
+    //     throw new Error(ERROR_MESSAGES.INPUT_EMPTY);
+    // }
 
-    // // const { query, proxy, maxAgeSecs, maxPoolSize, maxUsageCount } = input;
-    // // const proxy = null
-    // const maxAgeSecs = 999999999
-    // const maxPoolSize = 10
-    // const maxUsageCount = 200
+    // const { query, proxy, maxAgeSecs, maxPoolSize, maxUsageCount } = input;
+    // const proxy = null
+    const maxAgeSecs = 999999999
+    const maxPoolSize = 10
+    const maxUsageCount = 200
 
-    // // export const proxyConfiguration = await Actor.createProxyConfiguration(proxy ?? {
-    // //     useApifyProxy: false
-    // // });
-
-    // const crawler = new BasicCrawler({
-    //     requestHandler: router,
-    //     // use multiple sessions to enable quick concurrent scraping
-    //     // without getting noticed by Quora's rate limiting
-    //     useSessionPool: true,
-    //     sessionPoolOptions: {
-    //         // the following options are those that have been tested multiple times to work;
-    //         // if this actor gets traction, you might enable their customization;
-
-    //         // several sessions have proved to be enough
-    //         // too few sessions might slow down the crawl or fall under rate limiting
-    //         maxPoolSize,
-    //         sessionOptions: {
-    //             // a single session is able to last indefinitely without getting blocked
-    //             maxAgeSecs,
-    //             // just as a precaution, however, let's change a session after 100 requests so as not to
-    //             // arouse suspicion
-    //             maxUsageCount,
-    //         },
-    //     },
+    // export const proxyConfiguration = await Actor.createProxyConfiguration(proxy ?? {
+    //     useApifyProxy: false
     // });
 
-    // await answerStore.initialize();
+    const crawler = new BasicCrawler({
+        requestHandler: router,
+        // use multiple sessions to enable quick concurrent scraping
+        // without getting noticed by Quora's rate limiting
+        useSessionPool: true,
+        sessionPoolOptions: {
+            // the following options are those that have been tested multiple times to work;
+            // if this actor gets traction, you might enable their customization;
 
-    // await crawler.run([
-    //     constructGraphQLRequest(QueryType.SEARCH, {
-    //         after: "0",
-    //         first: PAGINATION_PARAMS.PAGINATION_BATCH,
-    //         query,
-    //         ...nonConfigurableQueryArguments[QueryType.SEARCH],
-    //     }),
-    // ]);
+            // several sessions have proved to be enough
+            // too few sessions might slow down the crawl or fall under rate limiting
+            maxPoolSize,
+            sessionOptions: {
+                // a single session is able to last indefinitely without getting blocked
+                maxAgeSecs,
+                // just as a precaution, however, let's change a session after 100 requests so as not to
+                // arouse suspicion
+                maxUsageCount,
+            },
+        },
+    });
 
-    // // Exit successfully
-    // await Actor.exit();
+    await answerStore.initialize();
 
-    // renameAndMoveQuestions();
-    // moveAnswers();
+    await crawler.run([
+        constructGraphQLRequest(QueryType.SEARCH, {
+            after: "0",
+            first: PAGINATION_PARAMS.PAGINATION_BATCH,
+            query,
+            ...nonConfigurableQueryArguments[QueryType.SEARCH],
+        }),
+    ]);
+
+    // Exit successfully
+    await Actor.exit();
+
+    renameAndMoveQuestions();
+    moveAnswers();
 }
