@@ -94,11 +94,8 @@ export const isAnswersKVKey = (
 
 export const getAllExistingQuestions = () => {
     return new Set(
-        JSON.parse(
-            fs.readFileSync(
-                path.join('./existing_qids.json'),
-                'utf8'
-            )
+        fs.readdirSync(
+            path.join(PERSISTANT_STORAGE_PATH.questions)
         )
     )
 }
