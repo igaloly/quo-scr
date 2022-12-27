@@ -6,7 +6,7 @@ import {
     constructGraphQLRequest,
     getAllExistingQuestions,
 } from "./helpers/index.js";
-import { proxyConfiguration } from "./main.js";
+// import { proxyConfiguration } from "./main.js";
 import { parseQuestionAnswersPage } from "./page_scrapers/parse_question_answers_page.js";
 import { parseSearchResult } from "./page_scrapers/parse_search_result.js";
 import { scrapeCookies } from "./page_scrapers/scrape_cookies.js";
@@ -27,9 +27,9 @@ const defaultCrawlerState: CrawlerState = {
 // attach proxy url to each session
 router.use(async ({ session, log }) => {
     if (session && !session.userData.isProxySet) {
-        session.userData.proxyUrl =
-            proxyConfiguration &&
-            (await proxyConfiguration.newUrl(session.id));
+        // session.userData.proxyUrl =
+        //     proxyConfiguration &&
+        //     (await proxyConfiguration.newUrl(session.id));
         log.debug(
             `Selected ${session.userData.proxyUrl} as proxy url for session with id: ${session.id}`
         );
