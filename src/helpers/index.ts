@@ -103,7 +103,7 @@ export const getAllExistingQuestions = () => {
     )
 }
 
-export const renameQuestions = () => {
+export const renameAndMoveQuestions = () => {
     const questionsFiles = fs.readdirSync(path.join(TEMP_STORAGE_PATH.questions));
     questionsFiles.forEach(questionFileName => {
         // Huristic
@@ -111,29 +111,22 @@ export const renameQuestions = () => {
         if(!shouldBeRenamed) {
             return
         }
-        const questionFilePath = `${TEMP_STORAGE_PATH.questions}/${questionFileName}`
-        const questionFileData = fs.readFileSync(path.join(questionFilePath), 'utf8');
+        const questionFilePath = path.join(TEMP_STORAGE_PATH.questions, questionFileName)
+        const questionFileData = fs.readFileSync(questionFilePath, 'utf8');
         const question = JSON.parse(questionFileData)
-        const questionNewPath = `${TEMP_STORAGE_PATH.questions}/${question.qid}.json`
-        fs.renameSync(questionFilePath, questionNewPath)
-    })
-}
-
-export const moveQuestions = () => {
-    const questionsFiles = fs.readdirSync(path.join(TEMP_STORAGE_PATH.questions));
-    questionsFiles.forEach(questionFileName => {
         fs.renameSync(
-            path.join(TEMP_STORAGE_PATH.questions, questionFileName),
-            path.join(PERSISTANT_STORAGE_PATH.questions, questionFileName)
+            questionFilePath,
+            path.join(PERSISTANT_STORAGE_PATH.questions, `${question.qid}.json`)
         )
     })
 }
+
 export const moveAnswers = () => {
     const answersFiles = fs.readdirSync(path.join(TEMP_STORAGE_PATH.answers));
     const ignoreFiles = ['CRAWLEE_STATE', 'SDK_CRAWLER_STATISTICS_0','SDK_SESSION_POOL_STATE']
     answersFiles.forEach(answersFileName => {
-        const shouldNotMove = ignoreFiles.some(fileToIgnore => answersFileName.startsWith(fileToIgnore))
-        if(shouldNotMove) {
+        const shouldMove = ignoreFiles.every(fileToIgnore => !answersFileName.startsWith(fileToIgnore))
+        if(!shouldMove) {
             return
         }
         fs.renameSync(
