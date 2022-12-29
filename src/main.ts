@@ -2,19 +2,20 @@ import { Actor } from "apify";
 import { BasicCrawler } from "crawlee";
 import { PAGINATION_PARAMS } from "./constants/api.js";
 // import { ERROR_MESSAGES } from "./constants/error_messages.js";
-import { constructGraphQLRequest, moveAnswers, renameAndMoveQuestions } from "./helpers/index.js";
+import { constructGraphQLRequest, getAllExistingQuestions } from "./helpers/index.js";
 import { router } from "./routes.js";
-import { answerStore } from "./stores/answers_store.js";
+// import { answerStore } from "./stores/answers_store.js";
 // import { Input } from "./types/input.js";
 import { nonConfigurableQueryArguments } from "./types/query_arguments.js";
 import { QueryType } from "./types/query_types.js";
 
-// const oldOnes = ['why', 'what', 'how', 'should', 'have', 'I', 'he', 'you', 'do', 'his', 'we', 'say', 'her']
-const queries = ['she', 'my', 'one', 'all', 'would', 'what', 'so', 'up', 'out', 'who', 'get', 'which', 'go', 'me', 'when', 'make', 'can', 'like', 'time', 'just', 'him', 'know', 'take', 'people', 'year', 'your', 'good', 'some', 'could', 'see', 'other', 'now', 'look', 'only', 'come', 'over', 'think', 'back', 'after', 'use', 'two', 'how', 'our', 'work', 'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'give', 'day', 'most', 'us']
+const queries = ['why', 'what', 'how', 'should', 'have', 'I', 'he', 'you', 'do', 'his', 'we', 'say', 'her', 'she', 'my', 'one', 'all', 'would', 'what', 'so', 'up', 'out', 'who', 'get', 'which', 'go', 'when', 'make', 'can', 'like', 'time', 'just', 'him', 'know', 'take', 'people', 'year', 'your', 'good', 'some', 'could', 'see', 'other', 'now', 'look', 'only', 'come', 'over', 'think', 'back', 'after', 'use', 'two', 'how', 'our', 'work', 'first', 'well', 'way', 'even', 'new', 'want', 'because', 'any', 'give', 'day', 'most', 'us']
 
+// GC error..... do it manually \ change inplementation
 for(const query of queries) {
+    console.log('Querying', query)
     // Initialize the Apify SDK
-    await Actor.init();
+    // await Actor.init();
 
     // const input = await Actor.getInput<Input>();
     // if (!input) {
@@ -30,6 +31,8 @@ for(const query of queries) {
     // export const proxyConfiguration = await Actor.createProxyConfiguration(proxy ?? {
     //     useApifyProxy: false
     // });
+
+    router.questionFileNames = getAllExistingQuestions()
 
     const crawler = new BasicCrawler({
         requestHandler: router,
@@ -53,7 +56,7 @@ for(const query of queries) {
         },
     });
 
-    await answerStore.initialize();
+    // await answerStore.initialize();
 
     await crawler.run([
         constructGraphQLRequest(QueryType.SEARCH, {
@@ -65,8 +68,5 @@ for(const query of queries) {
     ]);
 
     // Exit successfully
-    await Actor.exit();
-
-    renameAndMoveQuestions();
-    moveAnswers();
+    // await Actor.exit();
 }

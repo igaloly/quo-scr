@@ -4,11 +4,13 @@ import { RequestOptions } from "crawlee";
 import { BASE_URL } from "../constants/api.js";
 import { QueryArguments } from "../types/query_arguments.js";
 import { QueryType } from "../types/query_types.js";
+import { AnswerInfo, QuestionInfo } from '../types/parser_results.js';
 
 
 const PERSISTANT_STORAGE_PATH = {
     questions: `./quora_data/datasets/default`,
-    answers: `./quora_data/key_value_stores/default`
+    answers: `./quora_data/key_value_stores/default`,
+    temp: `./test`
 }
 const TEMP_STORAGE_PATH = {
     questions: `./storage/datasets/default`,
@@ -100,35 +102,14 @@ export const getAllExistingQuestions = () => {
     )
 }
 
-export const renameAndMoveQuestions = () => {
-    const questionsFiles = fs.readdirSync(path.join(TEMP_STORAGE_PATH.questions));
-    questionsFiles.forEach(questionFileName => {
-        // Huristic
-        const shouldBeRenamed = questionFileName.startsWith('000')
-        if(!shouldBeRenamed) {
-            return
-        }
-        const questionFilePath = path.join(TEMP_STORAGE_PATH.questions, questionFileName)
-        const questionFileData = fs.readFileSync(questionFilePath, 'utf8');
-        const question = JSON.parse(questionFileData)
-        fs.renameSync(
-            questionFilePath,
-            path.join(PERSISTANT_STORAGE_PATH.questions, `${question.qid}.json`)
-        )
-    })
+export const saveQuesiton = (question: QuestionInfo) => {
+    const fileName = `${question.qid}.json`
+    const thePath = path.join(PERSISTANT_STORAGE_PATH.questions, fileName)
+    fs.writeFileSync(thePath, JSON.stringify(question, null, "\t"))
 }
 
-export const moveAnswers = () => {
-    const answersFiles = fs.readdirSync(path.join(TEMP_STORAGE_PATH.answers));
-    const ignoreFiles = ['CRAWLEE_STATE', 'SDK_CRAWLER_STATISTICS_0','SDK_SESSION_POOL_STATE']
-    answersFiles.forEach(answersFileName => {
-        const shouldMove = ignoreFiles.every(fileToIgnore => !answersFileName.startsWith(fileToIgnore))
-        if(!shouldMove) {
-            return
-        }
-        fs.renameSync(
-            path.join(TEMP_STORAGE_PATH.answers, answersFileName),
-            path.join(PERSISTANT_STORAGE_PATH.answers, answersFileName)
-        )
-    })
+export const saveAnswers = (answers: AnswerInfo[], qid: string) => {
+    const fileName = `qid_${qid}_answers.json`
+    const thePath = path.join(PERSISTANT_STORAGE_PATH.answers, fileName)
+    fs.writeFileSync(thePath, JSON.stringify(answers, null, 2))
 }

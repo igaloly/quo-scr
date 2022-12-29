@@ -4,21 +4,20 @@ import { DEFAULT_QUERY_EXTENSIONS } from "./constants/extension_codes.js";
 import {
     constructAnswersKVKey,
     constructGraphQLRequest,
-    getAllExistingQuestions,
+    saveAnswers,
+    saveQuesiton,
 } from "./helpers/index.js";
 // import { proxyConfiguration } from "./main.js";
 import { parseQuestionAnswersPage } from "./page_scrapers/parse_question_answers_page.js";
 import { parseSearchResult } from "./page_scrapers/parse_search_result.js";
 import { scrapeCookies } from "./page_scrapers/scrape_cookies.js";
-import { answerStore } from "./stores/answers_store.js";
+// import { answerStore } from "./stores/answers_store.js";
 import { CrawlerState } from "./types/crawler_state.js";
 import { AnswerInfo, PageInfo, QuestionInfo } from "./types/parser_results.js";
 import { nonConfigurableQueryArguments } from "./types/query_arguments.js";
 import { QueryType } from "./types/query_types.js";
 
 export const router = createBasicRouter();
-
-const questionFileNames = getAllExistingQuestions()
 
 const defaultCrawlerState: CrawlerState = {
     extensionCodes: DEFAULT_QUERY_EXTENSIONS,
@@ -107,8 +106,8 @@ router.addHandler(
             throw e;
         }
 
-        questions = questions.filter(({qid}) => !questionFileNames.has(`${qid}.json`))
-        await Dataset.pushData(questions);
+        questions = questions.filter(({qid}) => !router.questionFileNames.has(`${qid}.json`))
+        questions.forEach(saveQuesiton)
 
         log.info(`Scraped ${questions.length} questions from search`);
 
@@ -166,7 +165,7 @@ router.addHandler(
             throw e;
         }
         const { qid } = request.userData.initialPayload.variables;
-        answerStore.addAnswers(answers, qid);
+        saveAnswers(answers, qid)
         log.info(
             `Scraped ${
                 answers.length
